@@ -19,11 +19,11 @@ for i in range(n):
 n = int(input())
 
 for bit in range(1 << n):
-    patern = []
+    pattern = []
     print(bit)
     for j in range(n):
         if 1 & (bit >> j):
-            patern.append("T")
+            pattern.append("T")
         else:
-            patern.append("F")
-    print(patern)
+            pattern.append("F")
+    print(pattern)
