@@ -1,27 +1,22 @@
-n = input()
+S = input()
 
-ans = 0
-for num in range(1 << len(n)):
-    n_1 = ""
-    n_2 = ""
-    for i in range(len(n)):
-        if 1 & (num >> i) == 1:
-            n_1 += n[i]
+n = len(S)
+dp = [[0 for _ in range(n)] for _ in range(8)]
+R = "chokudai"
+for i in range(n):
+    for j in range(8):
+        if j == 0:
+            if S[i] == R[j]:
+                if i == 0:
+                    dp[j][i] = 1
+                else:
+                    dp[j][i] = dp[j][i-1]+1
+            else:
+                dp[j][i] = dp[j][i-1]
         else:
-            n_2 += n[i]
-
-    if len(n_1) == 0 or len(n_2) == 0:
-        continue
-    else:
-        n_1 = sorted(list(n_1), reverse=True)
-        a = ""
-        for n1 in n_1:
-            a += n1
-        n_2 = sorted(list(n_2), reverse=True)
-        b = ""
-        for n2 in n_2:
-            b += n2
-
-        ans = max(ans, int(a)*int(b))
-
-print(ans)
+            if S[i] != R[j]:
+                dp[j][i] = dp[j][i-1]
+            else:
+                dp[j][i] = (dp[j][i-1] + dp[j-1][i-1]) % (10**9+7)
+# print(dp)
+print(dp[-1][-1])
