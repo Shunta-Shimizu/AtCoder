@@ -4,12 +4,14 @@ A = list(map(int, input().split()))
 
 que = deque()
 for i in range(n):
-    if i % 2 == 0:
-        que.appendleft(A[i])
-    else:
+    if (i+1)%2 == 1:
         que.append(A[i])
+    else:
+        que.appendleft(A[i])
 
 if n%2 == 0:
-    print(*list(reversed(que)), sep=" ")
+    ans = list(que)
 else:
-    print(*que, sep=" ")
+    ans = list(reversed(list(que)))
+
+print(*ans)
