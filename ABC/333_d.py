@@ -10,6 +10,7 @@ if len(graph[1]) == 1:
     ans = 1
 else:
     A = []
+    ans2 = 0
     for i in graph[1]:
         que = deque()
         que.append(i)
@@ -25,7 +26,7 @@ else:
                     que.append(y)
         # print(nodes)
         A.append(len(nodes))
-    
+        ans2 = max(ans2, len(nodes))
     A.sort()
     ans = 0
     for i, c in enumerate(A):
@@ -37,3 +38,4 @@ else:
             else:
                 ans += c-1
 print(ans)
+print(n-ans2)

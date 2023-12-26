@@ -1,47 +1,48 @@
-from collections import defaultdict, deque
-n, m = map(int, input().split())
-graph = defaultdict(set)
-check = defaultdict(int)
-for _ in range(m):
-    u, v = map(int, input().split())
-    if u == v:
-        graph[u].add(v)
-        check[(u, v)] += 1
-    else:
-        graph[u].add(v)
-        graph[v].add(u)
-        check[(u, v)] += 1
-        check[(v, u)] += 1
+class UnionFind:
+    def __init__(self, n):
+        # 親ノードを管理する配列
+        self.parent = [i for i in range(n)]
+        # 木の高さを管理する配列
+        self.rank = [0 for _ in range(n)]
 
+    def find(self, x):
+        # parent[x-1] = x のとき、xは根
+        if self.parent[x] == x:
+            return x
+        else:
+            # 根を探索する過程で親を更新（根を調べる計算量を減らすため）
+            self.parent[x] = self.find(self.parent[x])
+            return self.parent[x]
+    
+    def same(self, x, y):
+        return self.find(x) == self.find(y)
+    
+    def unite(self, x, y):
+        # 根を探索
+        x = self.find(x)
+        y = self.find(y)
 
-tf = True
-tf_nodes = [False for _ in range(n)]
-for i in range(1, n+1):
-    if tf_nodes[i-1]:
-        continue
-    else:
-        que = deque()
-        que.append(i)
-        nodes = {i}
-        edge = 0
-        while que:
-            x = que.popleft()
-            tf_nodes[x-1] = True
-            for y in graph[x]:
-                if y not in nodes:
-                    print([x, y])
-                    edge += check[(x, y)]
-                    nodes.add(y)
-                    que.append(y)
-                else:
-                    if x == y:
-                        edge += check[(x, y)]
+        # 木の高さを比較し、低い方を高い方に結合
+        if self.rank[x] > self.rank[y]:
+            self.parent[y] = x
+        elif self.rank[x] < self.rank[y]:
+            self.parent[x] = y
+        else:
+            self.parent[y] = x
+            self.rank[x] += 1
 
-        print("check:", len(nodes), edge)
-        if len(nodes) != edge:
-            tf = False
+# n, m = map(int, input().split())
+# uf = UnionFind(n)
+# for _ in range(m):
+#     u, v = map(int, input().split())
+#     uf.unite(u, v)
+import string
+n = int(input())
+S = input()
 
-if tf:
-    print("Yes")
-else:
-    print("No")
+alphabet = string.ascii_uppercase
+ans = ""
+for i in range(len(S)):
+    ans += alphabet[(alphabet.index(S[i])+n)%26]
+
+print(ans)
