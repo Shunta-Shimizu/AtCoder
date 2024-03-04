@@ -1,18 +1,29 @@
-# from collections import defaultdict
-# n = int(input())
-# S = input()
-# count = defaultdict(list)
+n = int(input())
+S = input()
 
-# sp = S[0]
-# for i in range(1, n):
+count = [[0 for _ in range(n)] for _ in range(2)]
+for i, s in enumerate(S):
+    if i == 0:
+        if s == "W":
+            count[0][i] += 1
+        else:
+            count[1][i] += 1
+    else:
+        if s == "W":
+            count[0][i] = count[0][i-1]+1
+            count[1][i] = count[1][i-1]
+        else:
+            count[0][i] = count[0][i-1]
+            count[1][i] = count[1][i-1]+1
 
-# x1, y1, x2, y2 = map(int, input().split())
+ans = [0 for _ in range(n)]
+for i in range(n):
+    if S[i] == "W":
+        ans[i] += count[0][i]-1
+        ans[i] += count[1][-1]-count[1][i]
+    else:
+        ans[i] += count[0][i]
+        ans[i] += count[1][-1]-count[1][i]
 
-# dy = abs(y2-y1)
-# dx = abs(x2-x1)
-# x3 = x2 - dx
-# y3 = y2 - dy
-# x4 = x3 - dx
-# y4 = y1 - dy
-
-# print(x3, y3, x4, y4)
+# print(count)
+print(min(ans))

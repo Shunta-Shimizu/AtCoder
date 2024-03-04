@@ -1,12 +1,12 @@
+from functools import lru_cache
 n = int(input())
 
-Ans = []
-for i in range(n):
-    if i == 0:
-        S = [1]
-        Ans.append(S)
+@lru_cache
+def f(n):
+    if n == 1:
+        return [1]
     else:
-        S = Ans[i-1] + [i+1] + Ans[i-1]
-        Ans.append(S)
+        return f(n-1)+[n]+f(n-1)
 
-print(*Ans[-1])
+ans = f(n)
+print(*ans)
