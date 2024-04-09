@@ -1,39 +1,39 @@
+from collections import defaultdict, deque
 n, m = map(int, input().split())
 A = list(map(int, input().split()))
 B = list(map(int, input().split()))
 
-Xa = [0 for _ in range(n)]
-Xb = [0 for _ in range(n)]
-tfa = [False for _ in range(n)]
-tfb = [False for _ in range(n)]
+graph = defaultdict(set)
+visited = defaultdict(int)
 for i in range(m):
-    if not tfa[A[i]-1] and not tfb[B[i]-1]:
-        Xa[A[i]-1] = 0
-        Xb[B[i]-1] = 1
-        tfa[A[i]-1] = True
-        tfb[B[i]-1] = True
-        if not tfa[B[i]-1]:
-            Xa[B[i]-1] = 1
-            tfa[B[i]-1] = True
-        if not tfb[A[i]-1]:
-            Xb[A[i]-1] = 0
-            tfb[A[i]-1] = True
-    elif tfa[A[i]-1] and not tfb[B[i]-1]:
-        Xb[B[i]-1] = 1
-        tfb[B[i]-1] = True
-        if not tfa[B[i]-1]:
-            Xa[B[i]-1] = 0
-            tfa[B[i]-1] = True
-    elif not tfa[A[i]-1] and tfb[B[i]-1]:
-        Xa[A[i]-1] = 1
-        tfa[A[i]-1] = True
-        if not tfb[A[i]-1]:
-            Xb[A[i]-1] = 0
-            tfb[A[i]-1] = True
+    graph[A[i]].add(B[i])
+    graph[B[i]].add(A[i])
+    visited[A[i]] = -1
+    visited[B[i]] = -1
 
-for i in range(n):
-    if Xa[i] != Xb[i]:
+for a in list(graph.keys()):
+    if visited[a] != -1:
+        continue
+    que = deque()
+    que.append(a)
+    visited[a] = 0
+    while que:
+        x = que.popleft()
+        for y in graph[x]:
+            if visited[y] != -1:
+                if visited[y] == visited[x]:
+                    print("No")
+                    exit()
+            else:
+                if visited[x] == 0:
+                    visited[y] = 1
+                elif visited[x] == 1:
+                    visited[y] = 0
+                que.append(y)
+
+for v in visited:
+    if v == -1:
         print("No")
         exit()
-    
+
 print("Yes")
